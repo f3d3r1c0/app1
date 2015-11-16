@@ -34,15 +34,16 @@
         <link rel="stylesheet" href="js/jquery.mobile-1.4.5.min.css"/>
         <script type="text/javascript" src="js/jquery-1.11.3.min.js"></script>
         <script type="text/javascript" src="js/jquery.mobile-1.4.5.min.js"></script>                
-        <style type="text/css">
+        <style type="text/css">        
         .ui-filter-inset {
             margin-top: 0;
-        }
+        }        
         </style>                
         <!-- end app -->
 
     </head>
-    <body>
+
+<body>
 
 <!--
 <div class="app">
@@ -57,6 +58,8 @@
 <center>
 
 <div id="search" class="app" data-role="page">
+
+    <br/>
 
     <div id="deviceready" data-role="main" class="ui-content" style="max-width: 400px;"> 
         
@@ -100,6 +103,10 @@
         <a href="javascript: dosearch();" id="searchButton"
             class="ui-btn ui-corner-all ui-shadow ui-btn-middle">Cerca</a>
         
+        <a href="javascript: docap();" id="scanButton"
+            class="ui-btn ui-corner-all ui-shadow ui-btn-middle">Scan</a>
+
+
         <!-- ajax loader -->
         <div id="loading" data-position="fixed" style="display: none;">
             <img alt="loading" src="js/images/ajax-loader.gif" style="opacity: 0.3;"/>
@@ -416,17 +423,18 @@
 
 </div>
 
-
-</center>
-
-
+<!-- 2 -->
+</center> 
 
 
+        <script type="text/javascript" src="cordova.js"></script>     
 
-        <script type="text/javascript" src="cordova.js"></script>
+        <script type="text/javascript" src="barcodescanner.js"></script>        
+
+
         <script type="text/javascript" src="js/index.js"></script>
         <script type="text/javascript">
-            app.initialize();
+            app.initialize(); 
         </script>
 
     </body>

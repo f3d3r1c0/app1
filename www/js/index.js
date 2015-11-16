@@ -18,7 +18,7 @@ function dosearch(aic_)
             if (tbox) tbox.val(aic_);
             vaic = aic_;
         }
-        else if (!tbox) {
+        else if (!tbox) {                        
             msgbox('Inserire il codice AIC');
             return;
         }
@@ -112,7 +112,8 @@ function dosearch(aic_)
             },
 
             error: function (data) {   
-
+                
+                navigator.notification.beep(1);
                 msgbox('Codice AIC non valido o non trovato');    
                 
             }
@@ -145,7 +146,8 @@ function dosearch(aic_)
 
     }
     catch(e2) {
-            
+
+        navigator.vibrate(1000);        
         msgbox(e2);            
         
     }
@@ -223,6 +225,72 @@ function chlang(lang)
     }
     
 }
+
+function doscan()
+{
+    // not  initialized cordova.plugins;
+
+
+var msg = '';
+for(var propertyName in cordova) {
+   // propertyName is what you want
+   // you can get the value like this: myObject[propertyName]
+   msg += "- " + propertyName;
+   msg += '\n';
+}
+alert(msg);
+
+    try {
+
+        var scanner = cordova.plugins.barcodeScanner;
+        //var scanner = cordova.require("com.phonegap.plugins.barcodescanner.BarcodeScanner");
+
+        scanner.scan(
+              function (result) {
+                  alert("We got a barcode\n" +
+                        "Result: " + result.text + "\n" +
+                        "Format: " + result.format + "\n" +
+                        "Cancelled: " + result.cancelled);
+              }, 
+              function (error) {
+                  alert("Scanning failed: " + error);
+              }  
+           );
+    }
+    catch (e) {
+        alert('exception-x: ' + e);
+    }
+}
+
+function docap()
+{
+    try {
+        var options = { limit: 1 };    
+        navigator.device.capture.captureImage(
+            function (mediaFiles) {
+                try {
+                    var i, path, len;
+                    for (i = 0, len = mediaFiles.length; i < len; i += 1) {
+                        path = mediaFiles[i].fullPath;
+                        // do something interesting with the file
+                        //navigator.notification.alert('Filepath: ' + path, null, 'Capture Info');
+                        dosearch('00011111');
+                    }
+                }
+                catch (e) {
+                    navigator.notification.alert('Error code: ' + e, null, 'Capture Loading Error');
+                }                
+            }, 
+            function (error) {                
+                navigator.notification.alert('Error code: ' + error.code, null, 'Capture Error');                
+            }, 
+            options);
+    }
+    catch (e) {
+        navigator.notification.alert('Error code: ' + e, null, 'Capture Error 2');
+    }    
+}
+
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -362,7 +430,7 @@ var app = {
     onDeviceReady: function() {
         
 		app.receivedEvent('deviceready');
-        
+
         var parentElement = document.getElementById("search");
         var listeningElement = parentElement.querySelector('.listening');
         var receivedElement = parentElement.querySelector('.received');
