@@ -1,9 +1,11 @@
+var baseurl_ = "http://webservices-farmadati.dyndns.ws/FarmastampatiMobi/";
+
 var doc = null;           
 var list = null;
 var tbox = null;
 
 function msgbox(mesg)
-{           
+{
     $('#popupDialogMessage').html(mesg);
     $('#popupDialog').popup('open');    
 }
@@ -26,7 +28,7 @@ function dosearch(aic_)
             vaic = tbox.val().trim();
         }
 
-        if (!vaic || vaic.length == 0) throw 'Inserire il codice AIC';  
+        if (!vaic || vaic.length == 0) throw 'Inserire il codice AIC';
 
         if (vaic.charAt(0).toUpperCase() == 'A') vaic = vaic.substr(1);
         
@@ -65,7 +67,7 @@ function dosearch(aic_)
             //method: 'post',
             
             //DEBUG HTML
-            url: 'document.json',
+            url: baseurl_ + 'document.json',
             dataType: 'json',
             method: 'get',            
                                 
@@ -114,6 +116,7 @@ function dosearch(aic_)
             error: function (data) {   
                 
                 navigator.notification.beep(1);
+                navigator.vibrate(500);        
                 msgbox('Codice AIC non valido o non trovato');    
                 
             }
@@ -147,7 +150,8 @@ function dosearch(aic_)
     }
     catch(e2) {
 
-        navigator.vibrate(1000);        
+        navigator.vibrate(500);        
+        navigator.notification.beep(1);
         msgbox(e2);            
         
     }
@@ -155,7 +159,31 @@ function dosearch(aic_)
 
 function getpageurl(filename, page)
 {            
-    return filename + '/' + page + '.png';
+    var gsoptsD44 = 
+        "-sDEVICE=pngalpha -dFirstPage=" + page + 
+        " -dLastPage=" + page + 
+        " -dMaxBitmap=500000000 -dAlignToPixels=0 -dGridFitTT=0 -dTextAlphaBits=4 -dGraphicsAlphaBits=4 -r120x120"
+    
+    var gsoptsD14 = 
+        "-sDEVICE=pngalpha -dFirstPage=" + page + 
+        " -dLastPage=" + page + 
+        " -dMaxBitmap=500000000 -dAlignToPixels=0 -dGridFitTT=0 -dTextAlphaBits=1 -dGraphicsAlphaBits=4 -r120x120"
+
+    var gsoptsD11 = 
+        "-sDEVICE=pngalpha -dFirstPage=" + page + 
+        " -dLastPage=" + page + 
+        " -dMaxBitmap=500000000 -dAlignToPixels=0 -dGridFitTT=0 -dTextAlphaBits=1 -dGraphicsAlphaBits=1 -r120x120"
+
+    var timeout = -1;
+    var nocache = false; 
+    var gsext = 'png';
+    var gsopts = gsoptsD44;
+    
+    return baseurl_ + 'pages/' + filename + '?page=' + page +
+            (timeout > 0 ? '&timeout=' + timeout : '') + 
+            (nocache ? '&nocache=true' : '') + 
+            '&gsext=' + gsext +
+            '&gsopts=' + encodeURI(gsopts);                                
 }
 
 function reload()
@@ -291,7 +319,6 @@ function docap()
     }    
 }
 
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -329,7 +356,7 @@ var app = {
                 $ul.html("<li><div class='ui-loader'><span class='ui-icon ui-icon-loading'></span></div></li>");
                 $ul.listview("refresh");
                 $.ajax({
-                    url: "autocom",
+                    url: baseurl_ + "autocom",
                     dataType: "jsonp",
                     crossDomain: true,
                     data: {
