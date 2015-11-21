@@ -45,35 +45,25 @@
 
 <body>
 
-<!--
-<div class="app">
-    <h1>Foglio Illustrativo</h1>    
-    <div id="deviceready" class="blink">
-        <p class="event listening">Connecting to Device</p>
-        <p class="event received">Device is Ready 1</p>
-    </div>
-</div>
--->
-
 <center>
 
-<div id="search" class="app" data-role="page">
+<div id="search" data-role="page">
+ 
+  <br /> 
+ 
+  <div id="deviceready" data-role="main" class="ui-content" style="max-width: 400px;"> 
 
-    <br/>
+	<!-- BEGIN LOGO HEADER AND TITLE -->
+	<img alt="Farmastampati Logo" src="images/farmast.png"/><br />
+	<span style="font-style: italic;">Visualizza il foglio illustrativo</span><br /><br />
+	<!-- END -->
+    
+	<span class="listening blink">Connessione al device ...</span>
 
-    <div id="deviceready" data-role="main" class="ui-content" style="max-width: 400px;"> 
-        
-        <!-- logo -->
-        <img alt="Farmastampati Logo" src="images/farmast.png"/><br />
-        <span style="font-style: italic;">Visualizza il foglietto illustrativo</span><br /><br />
-
-<span class="listening blink">Connessione al device ...</span>
-
-<span class="received" style="display: none;">
-
-        <!-- aic autocomplete  text box -->
-        <span style="font-weight: bolder;">Inserisci il Codice AIC</span>
-                
+	<span class="received" style="display: none;">
+    
+        <!-- BEGIN AUTOCOMPLETE AIC TEXT BOX  -->
+        <span style="font-weight: bolder;">Inserisci il Codice AIC</span>        
         <ul id="autocomplete" 
                 data-role="listview" 
                 data-inset="true"
@@ -81,85 +71,72 @@
                 data-filter-placeholder="Inserisci il codice AIC ..." 
                 data-filter-theme="a">
         </ul>
+        <!-- END -->
         
-        <!--
-        <input type="text" id="autocomplete"></input>
-        -->
-
-        <!-- msgbox -->        
-        <div tabindex="0" id="popupDialog-popup" class="ui-popup-container pop in ui-popup-active" data-history="false" >
-            <div data-position-to="origin" data-transition="none" data-corners="true" data-shadow="true" data-disabled="false" aria-disabled="false" data-role="popup" id="popupDialog" data-overlay-theme="a" data-theme="c" style="background: white;" class="ui-corner-all ui-popup ui-body-c ui-overlay-shadow" data-history="false" >
-                <div role="banner" data-role="header" data-theme="b" class="ui-corner-top ui-header ui-bar-a">
-                    <h1 aria-level="1" role="heading" class="ui-title">Avviso</h1>
-                </div>
-                <div role="main" data-role="content" data-theme="d" class="ui-corner-bottom ui-content ui-body-d">
-                    <h3 class="ui-title" id="popupDialogMessage"></h3>            
-                    <a class="ui-btn ui-shadow ui-btn-corner-all ui-btn-inline ui-btn-up-c" data-wrapperels="span" data-iconshadow="true" data-shadow="true" data-corners="true" href="#" data-role="button" data-inline="true" data-rel="back" data-theme="c"><span class="ui-btn-inner ui-btn-corner-all"><span class="ui-btn-text">Chiudi</span></span></a>
-                </div>
+        <!-- BEGIN DIALOG MESSAGE BOX -->        
+        <a id="popupDialogClick" href="#popupDialog" data-rel="popup" data-position-to="window" data-transition="pop" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-icon-delete ui-btn-icon-left ui-btn-b" style="display: none;" data-history="false">dummy</a>
+        <div data-role="popup" id="popupDialog" data-overlay-theme="b" data-theme="b" data-dismissible="true" style="max-width:400px;" data-history="false">
+            <div data-role="header" data-theme="a">
+            <h1>Avviso</h1>
+            </div>
+            <div role="main" class="ui-content">
+                <h3 class="ui-title" id="popupDialogMessage">Messaggio di prova</h3>    
+                <!--
+                <a href="#" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b" data-rel="back">Cancel</a>
+                -->
+                <a href="#" 
+                    class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b" 
+                    data-rel="back" 
+                    data-transition="flow"
+                    onclick="restore_enter()">Chiudi</a>
             </div>
         </div>
-        
-        <!-- search button click -->        
+        <!-- END -->        
+       
+        <!-- BEGIN SEARCH BUTTON -->        
         <a href="javascript: dosearch();" id="searchButton"
             class="ui-btn ui-corner-all ui-shadow ui-btn-middle">Cerca</a>
-        
-        <a href="javascript: docap();" id="scanButton"
-            class="ui-btn ui-corner-all ui-shadow ui-btn-middle">Scan</a>
+        <!-- END -->
 
+        <!-- BEGIN CAMERA SCAN BUTTON -->        
+        <a href="javascript: docap();" id="searchButton"
+            class="ui-btn ui-corner-all ui-shadow ui-btn-middle">Fai la foto al codice a barre</a>
+        <!-- END -->
 
-        <!-- ajax loader -->
+        <!-- BEGIN AJAX LOADER -->
         <div id="loading" data-position="fixed" style="display: none;">
             <img alt="loading" src="js/images/ajax-loader.gif" style="opacity: 0.3;"/>
         </div>
+        <!-- END -->
         
-        <!-- aic help instructions  -->
+        <!-- BEGIN AIC HELPER DISPLAY BUTTON -->
         <span>
-            <a href="#popupAic" data-rel="popup" data-position-to="window" data-transition="slideup"
+            <a href="#popupAic" data-position-to="window" data-transition="pop"
                     class="ui-btn ui-corner-all ui-shadow ui-btn-middle" style="color: #a0a0a0;">
                     Che cosa &egrave; il codice AIC
             </a>
         </span>
-        <div tabindex="1" id="popupAic-popup" class="ui-popup-container pop in ui-popup-active" data-history="false">
-            <div data-corners="true" data-shadow="true" data-disabled="false" 
-                aria-disabled="false" data-role="popup" id="popupAic" 
-                data-overlay-theme="a" data-theme="c" 
-                class="ui-corner-all ui-popup ui-body-c ui-overlay-shadow" 
-                data-history="false"
-                style="background: white; overflow: hidden;" >
-                <div role="banner" data-role="header" data-theme="b" class="ui-corner-top ui-header ui-bar-a">
-                    <h1 aria-level="1" role="heading" class="ui-title">Informazione</h1>
-                </div>
-                <div role="main" data-role="content" data-theme="d" class="ui-corner-bottom ui-content ui-body-d">
-                    <p>Il codice AIC &egrave; riportato sul bollino della confezione come evidenziato in giallo</p>
-                    <img style="border: 0px;" 
-                            alt="Codiice Agenzia Italiana del Farmaco" 
-                            src="images/aicsample.jpg" width="200px" />
-                    <a class="ui-btn ui-shadow ui-btn-corner-all ui-btn-inline ui-btn-up-c" data-wrapperels="span" data-iconshadow="true" data-shadow="true" data-corners="true" href="#" data-role="button" data-inline="true" data-rel="back" data-theme="c">
-                        <span class="ui-btn-inner ui-btn-corner-all">                        
-                            <span class="ui-btn-text">Chiudi</span>
-                        </span>
-                    </a>
-                </div>
-            </div>
-        </div>
-
-</span>
-
-    </div>
-
+        <!-- END -->
+	
+	</span>  
+    
+  </div>
+	
 </div>
 
 <!-- END SEARCH FORM -->
 
 <!-- BEGIN VISUALIZER -->
 
-<div data-role="page" id="page0">  
-    
-    <div data-role="header" class="ui-header ui-bar-a" role="contentinfo">
-    
-        <div data-role="navbar" class="ui-navbar ui-mini" role="navigation">        
+<div data-role="page" id="page0">
         
-            <ul class="ui-grid-b">          
+    <div id="navigbar" data-role="header" class="ui-header ui-bar-a" role="contentinfo">
+    
+        <div data-role="navbar" class="ui-navbar ui-mini" role="navigation">
+        
+
+            <ul class="ui-grid-b">
+
                 <li class="ui-block-a" style="width: 50%;">
                     <a href="#leftpanel0" 
                         data-icon="bars" 
@@ -178,6 +155,7 @@
                         </span>
                     </a>
                 </li>               
+
                 <li class="ui-block-b" style="width: 50%;">
                     <a href="#search" id="searchclick"
                         data-transition="slidedown"                         
@@ -196,173 +174,23 @@
                             <span class="ui-icon ui-icon-grid ui-icon-shadow">&nbsp;</span>
                         </span>
                     </a>
-                </li>                               
-            </ul>           
+                </li>
+                
+            </ul>    
+
         </div>      
+
     </div>    
     
-    <div data-role="main" class="ui-content" style="vertical-align: middle; padding: 0px;" data-history="false">            
-
-        <div id="caricamento" style="width: 100%; height: 800px;">
-            <br /><br /><br /><br /><br />
-            <img src="js/images/ajax-loader.gif" alt="caricamento" style="border: 0px; opacity: 0.3;"></src>
-        </div>
-        
-        <div style="box-shadow: 10px 10px 5px #888888; width: 100%;">
-            <img style="width: 100%;" src="#" id="page0file" />    
-            <span data-role="footer" class="ui-btn-text" id="page0footer"></span>    
-        </div>
-            
-        <div style="box-shadow: 10px 10px 5px #888888; width: 100%;">
-            <img style="width: 100%;" src="#" id="page1file" />    
-            <span data-role="footer" class="ui-btn-text" id="page1footer"></span>    
-        </div>
-            
-        <div style="box-shadow: 10px 10px 5px #888888; width: 100%;">
-            <img style="width: 100%;" src="#" id="page2file" />    
-            <span data-role="footer" class="ui-btn-text" id="page2footer"></span>    
-        </div>
-            
-        <div style="box-shadow: 10px 10px 5px #888888; width: 100%;">
-            <img style="width: 100%;" src="#" id="page3file" />    
-            <span data-role="footer" class="ui-btn-text" id="page3footer"></span>    
-        </div>
-            
-        <div style="box-shadow: 10px 10px 5px #888888; width: 100%;">
-            <img style="width: 100%;" src="#" id="page4file" />    
-            <span data-role="footer" class="ui-btn-text" id="page4footer"></span>    
-        </div>
-            
-        <div style="box-shadow: 10px 10px 5px #888888; width: 100%;">
-            <img style="width: 100%;" src="#" id="page5file" />    
-            <span data-role="footer" class="ui-btn-text" id="page5footer"></span>    
-        </div>
-            
-        <div style="box-shadow: 10px 10px 5px #888888; width: 100%;">
-            <img style="width: 100%;" src="#" id="page6file" />    
-            <span data-role="footer" class="ui-btn-text" id="page6footer"></span>    
-        </div>
-            
-        <div style="box-shadow: 10px 10px 5px #888888; width: 100%;">
-            <img style="width: 100%;" src="#" id="page7file" />    
-            <span data-role="footer" class="ui-btn-text" id="page7footer"></span>    
-        </div>
-            
-        <div style="box-shadow: 10px 10px 5px #888888; width: 100%;">
-            <img style="width: 100%;" src="#" id="page8file" />    
-            <span data-role="footer" class="ui-btn-text" id="page8footer"></span>    
-        </div>
-            
-        <div style="box-shadow: 10px 10px 5px #888888; width: 100%;">
-            <img style="width: 100%;" src="#" id="page9file" />    
-            <span data-role="footer" class="ui-btn-text" id="page9footer"></span>    
-        </div>
-            
-        <div style="box-shadow: 10px 10px 5px #888888; width: 100%;">
-            <img style="width: 100%;" src="#" id="page10file" />    
-            <span data-role="footer" class="ui-btn-text" id="page10footer"></span>    
-        </div>
-            
-        <div style="box-shadow: 10px 10px 5px #888888; width: 100%;">
-            <img style="width: 100%;" src="#" id="page11file" />    
-            <span data-role="footer" class="ui-btn-text" id="page11footer"></span>    
-        </div>
-            
-        <div style="box-shadow: 10px 10px 5px #888888; width: 100%;">
-            <img style="width: 100%;" src="#" id="page12file" />    
-            <span data-role="footer" class="ui-btn-text" id="page12footer"></span>    
-        </div>
-            
-        <div style="box-shadow: 10px 10px 5px #888888; width: 100%;">
-            <img style="width: 100%;" src="#" id="page13file" />    
-            <span data-role="footer" class="ui-btn-text" id="page13footer"></span>    
-        </div>
-            
-        <div style="box-shadow: 10px 10px 5px #888888; width: 100%;">
-            <img style="width: 100%;" src="#" id="page14file" />    
-            <span data-role="footer" class="ui-btn-text" id="page14footer"></span>    
-        </div>
-            
-        <div style="box-shadow: 10px 10px 5px #888888; width: 100%;">
-            <img style="width: 100%;" src="#" id="page15file" />    
-            <span data-role="footer" class="ui-btn-text" id="page15footer"></span>    
-        </div>
-            
-        <div style="box-shadow: 10px 10px 5px #888888; width: 100%;">
-            <img style="width: 100%;" src="#" id="page16file" />    
-            <span data-role="footer" class="ui-btn-text" id="page16footer"></span>    
-        </div>
-            
-        <div style="box-shadow: 10px 10px 5px #888888; width: 100%;">
-            <img style="width: 100%;" src="#" id="page17file" />    
-            <span data-role="footer" class="ui-btn-text" id="page17footer"></span>    
-        </div>
-            
-        <div style="box-shadow: 10px 10px 5px #888888; width: 100%;">
-            <img style="width: 100%;" src="#" id="page18file" />    
-            <span data-role="footer" class="ui-btn-text" id="page18footer"></span>    
-        </div>
-            
-        <div style="box-shadow: 10px 10px 5px #888888; width: 100%;">
-            <img style="width: 100%;" src="#" id="page19file" />    
-            <span data-role="footer" class="ui-btn-text" id="page19footer"></span>    
-        </div>
-            
-        <div style="box-shadow: 10px 10px 5px #888888; width: 100%;">
-            <img style="width: 100%;" src="#" id="page20file" />    
-            <span data-role="footer" class="ui-btn-text" id="page20footer"></span>    
-        </div>
-            
-        <div style="box-shadow: 10px 10px 5px #888888; width: 100%;">
-            <img style="width: 100%;" src="#" id="page21file" />    
-            <span data-role="footer" class="ui-btn-text" id="page21footer"></span>    
-        </div>
-            
-        <div style="box-shadow: 10px 10px 5px #888888; width: 100%;">
-            <img style="width: 100%;" src="#" id="page22file" />    
-            <span data-role="footer" class="ui-btn-text" id="page22footer"></span>    
-        </div>
-            
-        <div style="box-shadow: 10px 10px 5px #888888; width: 100%;">
-            <img style="width: 100%;" src="#" id="page23file" />    
-            <span data-role="footer" class="ui-btn-text" id="page23footer"></span>    
-        </div>
-            
-        <div style="box-shadow: 10px 10px 5px #888888; width: 100%;">
-            <img style="width: 100%;" src="#" id="page24file" />    
-            <span data-role="footer" class="ui-btn-text" id="page24footer"></span>    
-        </div>
-            
-        <div style="box-shadow: 10px 10px 5px #888888; width: 100%;">
-            <img style="width: 100%;" src="#" id="page25file" />    
-            <span data-role="footer" class="ui-btn-text" id="page25footer"></span>    
-        </div>
-            
-        <div style="box-shadow: 10px 10px 5px #888888; width: 100%;">
-            <img style="width: 100%;" src="#" id="page26file" />    
-            <span data-role="footer" class="ui-btn-text" id="page26footer"></span>    
-        </div>
-            
-        <div style="box-shadow: 10px 10px 5px #888888; width: 100%;">
-            <img style="width: 100%;" src="#" id="page27file" />    
-            <span data-role="footer" class="ui-btn-text" id="page27footer"></span>    
-        </div>
-            
-        <div style="box-shadow: 10px 10px 5px #888888; width: 100%;">
-            <img style="width: 100%;" src="#" id="page28file" />    
-            <span data-role="footer" class="ui-btn-text" id="page28footer"></span>    
-        </div>
-            
-        <div style="box-shadow: 10px 10px 5px #888888; width: 100%;">
-            <img style="width: 100%;" src="#" id="page29file" />    
-            <span data-role="footer" class="ui-btn-text" id="page29footer"></span>    
-        </div>
-            
-        <div style="box-shadow: 10px 10px 5px #888888; width: 100%;">
-            <img style="width: 100%;" src="#" id="page30file" />    
-            <span data-role="footer" class="ui-btn-text" id="page30footer"></span>    
-        </div>
-                
+    <div id="caricamento" style="width: 100%; height: 800px;">        
+        <img src="js/images/ajax-loader.gif" alt="caricamento" style="border: 0px; opacity: 0.3; margin-top: 80px;"></img>
+    </div>
+    
+    <div id="foglietto" data-role="main" class="ui-content" style="vertical-align: middle; padding: 0px;" data-history="false">        
+        <!-- 
+            serialized html, 
+            javascript initilization and reload document here             
+            -->
     </div>
     
     <!-- leftpanel1 -->
@@ -373,69 +201,116 @@
         <p>Il documento &egrave; disponibile nelle seguenti versioni</p>
 
         <div data-role="navbar">
+
             <ul>
+
                 <li id="lang-it-0" style="width: 100%;">
                     <span class="ui-btn-inner ui-btn-text">
-                        <a href="javascript:chlang('it')" 
-                                data-rel="close">                        
+                        <a href="javascript:chlang('it')"
+                                data-rel="close">
                             <img style="width: 20px;" src="images/it.png" /><br/>
-                            <span class="ui-btn-text">Italiano</span>                                                    
-                        </a>
-                    </span>
-                </li>
-                <li id="lang-de-0" style="width: 100%;">
-                    <span class="ui-btn-inner ui-btn-text">
-                        <a href="javascript:chlang('de')"
-                                data-rel="close">                        
-                            <img style="width: 20px;" src="images/de.png" /><br/>
-                            <span class="ui-btn-text">Deutsch</span>                                                    
-                        </a>
-                    </span>
-                </li>
-                <li id="lang-fr-0" style="width: 100%;">
-                    <span class="ui-btn-inner ui-btn-text">
-                        <a href="javascript:chlang('fr')"
-                                data-rel="close">                        
-                            <img style="width: 20px;" src="images/fr.png" /><br/>
-                            <span class="ui-btn-text">Francais</span>                                                    
-                        </a>
-                    </span>
-                </li>
-                <li id="lang-en-0" style="width: 100%;">
-                    <span class="ui-btn-inner ui-btn-text">
-                        <a href="javascript:chlang('en')"
-                                data-rel="close">                        
-                            <img style="width: 20px;" src="images/en.png" /><br/>
-                            <span class="ui-btn-text">English</span>                                                    
+                            <span class="ui-btn-text">Italiano</span>
                         </a>
                     </span>
                 </li>                
+
+                <li id="lang-de-0" style="width: 100%;">
+                    <span class="ui-btn-inner ui-btn-text">
+                        <a href="javascript:chlang('de')"
+                                data-rel="close">
+                            <img style="width: 20px;" src="images/de.png" /><br/>
+                            <span class="ui-btn-text">Deutsch</span>
+                        </a>
+                    </span>
+                </li>                
+
+                <li id="lang-en-0" style="width: 100%;">
+                    <span class="ui-btn-inner ui-btn-text">
+                        <a href="javascript:chlang('en')"
+                                data-rel="close">
+                            <img style="width: 20px;" src="images/en.png" /><br/>
+                            <span class="ui-btn-text">English</span>
+                        </a>
+                    </span>
+                </li>                
+                
             </ul>
         </div>       
 
         <br/>
         
         <a href="#demo-links" data-rel="close" class="ui-btn ui-shadow ui-corner-all ui-btn-a ui-icon-delete ui-btn-icon-left ui-btn-inline">Chiudi</a>
-        <p>Per chiudere questo pannello usare il pulsante 'chiudi' o cliccare fuori dai bordi, trascinare il dito a sinistra o premere il tasto Esc</p>
+        <p>
+            Per chiudere questo pannello usare il pulsante 'chiudi' o cliccare fuori dai bordi, 
+            trascinare il dito a sinistra o premere il tasto Esc
+        </p>
 
     </div>
     <!-- /leftpanel1 -->
 
 </div>
 
-<!-- 2 -->
-</center> 
+<!-- END VISUALIZER -->
+
+<!-- BEGIN POPUP AIC -->
+
+<div data-role="page" id="popupAic">
+    
+    <div role="banner" data-role="header" data-theme="b" class="ui-corner-top ui-header ui-bar-a">
+        <a href="#search" data-role="button" data-theme="b" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
+        <h1 aria-level="1" role="heading" class="ui-title">Informazione</h1>
+    </div>
+
+    <div role="main" data-role="content" data-theme="d" class="ui-corner-bottom ui-content ui-body-d">
+        <div role="main" data-role="content" style="max-width: 300px;">        
+            <b>Il codice AIC &egrave; riportato, come evidenziato in giallo:</b><br/>
+            <ol type="a" style="text-align: left;">
+                <li>
+                    <span style="font-size: 14px;">Sul bollino autoadesivo</span><br/>            
+                    <img style="border: 0px;" alt="Codice Agenzia Italiana del Farmaco" 
+                            src="images/aicsample.jpg" width="200px" />        
+                </li>
+                <li> 
+                    <span style="font-size: 14px;">Su uno dei lati della confezione</span><br/>                
+                    <img style="border: 0px;" alt="Codice Agenzia Italiana del Farmaco" 
+                            src="images/aicsample2.jpg" width="200px" />
+                </li>
+            </ol>
+        </div>
+    </div>    
+
+    <div data-role="footer">
+        <a class="ui-btn ui-shadow ui-btn-corner-all ui-btn-inline ui-btn-up-c" data-wrapperels="span" data-iconshadow="true" data-shadow="true" data-corners="true" href="#search" data-transition="slidedown" data-role="button" data-inline="true" data-theme="c" data-history="false">
+            <span class="ui-btn-inner ui-btn-corner-all">                        
+                <span class="ui-btn-text">Chiudi</span>
+            </span>
+        </a>
+    </div>
+
+</div>
+
+<!-- END POPUP AIC -->
+
+</center>
+
+<!-- 
+    /////////////////////////////////////////////////////////////////
+    //
+    // Phonegap footer libraries     
+    //
+    -->
 
 
-        <script type="text/javascript" src="cordova.js"></script>     
+    <script type="text/javascript" src="cordova.js"></script>     
 
-        <script type="text/javascript" src="barcodescanner.js"></script>        
+    <script type="text/javascript" src="barcodescanner.js"></script>        
 
 
-        <script type="text/javascript" src="js/index.js"></script>
-        <script type="text/javascript">
-            app.initialize(); 
-        </script>
+    <script type="text/javascript" src="js/index.js"></script>
+    <script type="text/javascript">
+        app.initialize(); 
+    </script>
 
-    </body>
+</body>
+
 </html>
