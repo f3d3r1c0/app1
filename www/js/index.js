@@ -6,6 +6,7 @@
  */
 //var baseurl_ = "";
 var baseurl_ = "http://webservices-farmadati.dyndns.ws/FarmastampatiMobi/";
+var baseurl_2_ = "http://172.20.10.3:8080/FarmastampatiWS/";
 
 var doc = null;           
 var list = null;
@@ -420,27 +421,132 @@ function doscan()
     }
 }
 
-function docap()
+function upload_file(fileURL)
+{
+
+    function win(r) {
+        //console.log("Response = " + r.response);
+        //console.log("Code = " + r.responseCode);
+        //console.log("Sent = " + r.bytesSent);
+        try {
+            alert(r.response);        
+            dosearch(r.response);
+        }
+        catch (e) {
+            navigator.notification.alert(e, null, 'Errore di Elaborazione');
+        }
+
+    }
+
+    function fail(error) {
+        var msg = "Scansione codice fallita:"
+        msg += "\r\ncode = " + error.code;
+        msg += "\r\nupload error source " + error.source;
+        msg += "\r\nupload error target " + error.target;
+        navigator.notification.alert(msg, null, 'Errore di caricamento su server');
+    }
+
+    var uri = encodeURI("http://some.server.com/upload.php");
+
+    var options = new FileUploadOptions();
+    options.fileKey="file";
+    options.fileName=fileURL.substr(fileURL.lastIndexOf('/')+1);
+    options.mimeType="image/jpeg";
+
+    var headers={'headerParam':'headerValue'};
+
+    options.headers = headers;
+
+    var ft = new FileTransfer();
+    ft.onprogress = function(progressEvent) {
+        if (progressEvent.lengthComputable) {
+          loadingStatus.setPercentage(progressEvent.loaded / progressEvent.total);
+        } else {
+          loadingStatus.increment();
+        }
+    };
+
+    //ft.upload(fileURL, uri, win, fail, options);
+    ft.upload(fileURL, encodeURI(baseurl_2_ + "scan"), win, fail, options);
+
+}
+
+
+///////////////////////////////////////////////////////////////////////////
+ 
+// Called when a photo is successfully retrieved
+function onPhotoURISuccess(imageURI) {
+
+    alert('ok 1: ' + imageURI);
+
+    try {
+        //FileIO.updateCameraImages(imageURI);
+        alert('ok 2: ' + imageURI);
+        upload_file (imageURI);            
+        
+    }
+    catch (e) {
+        navigator.notification.alert('Error code: ' + e, null, 'Capture Loading Error');
+    }  
+
+}
+ 
+// Called if something bad happens.
+function onFail(message) {
+    alert('Failed because: ' + message);
+}
+
+function docap() {
+
+//@see  https://github.com/apache/cordova-plugin-camera#module_camera.CameraOptions
+
+    navigator.camera.getPicture(onPhotoURISuccess, onFail, { quality: 50,
+        destinationType: navigator.camera.DestinationType.FILE_URI, 
+        saveToPhotoAlbum: true,
+        correctOrientation: true });
+
+    // Retrieve image file location from specified source
+    /*
+    var source = pictureSource.PHOTOLIBRARY;
+    navigator.camera.getPicture(onPhotoURISuccess, onFail, { quality: 50,
+                                destinationType: destinationType.FILE_URI,
+                                saveToPhotoAlbum: false,
+                                sourceType: source,
+                                allowEdit: true });
+*/
+}
+
+///////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+function docap2()
 {
     try {
         var options = { limit: 1 };    
+
         navigator.device.capture.captureImage(
+
             function (mediaFiles) {
+
                 try {
                     var i, path, len;
+
                     for (i = 0, len = mediaFiles.length; i < len; i += 1) {
+
                         path = mediaFiles[i].fullPath;
                         // do something interesting with the file
-                        //navigator.notification.alert('Filepath: ' + path, null, 'Capture Info');
+
+                        upload_file (path);
 
                         //
                         //
                         // TODO insert socket webservice here !!! 
                         //
                         //
-
-
-                        dosearch('A022019032');
+                        
                     }
                 }
                 catch (e) {
