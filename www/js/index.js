@@ -4,9 +4,11 @@
  *      @see http://demos.jquerymobile.com/1.4.5/icons/       
  *
  */
-//var baseurl_ = "";
-var baseurl_ = "http://webservices-farmadati.dyndns.ws/FarmastampatiMobi/";
-var baseurl_2_ = "http://172.20.10.3:8080/FarmastampatiWS/";
+ENDPOINT_ARCHIVE = 'http://webservices-farmadati.dyndns.ws/FarmastampatiMobi/archive';
+ENDPOINT_PAGES   = 'http://webservices-farmadati.dyndns.ws/FarmastampatiMobi/pages';
+ENDPOINT_AUTOCOM = 'http://webservices-farmadati.dyndns.ws/FarmastampatiMobi/autocom';
+ENDPOINT_SCAN    = 'http://webservices-farmadati.dyndns.ws/FarmastampatiMobi/scan';
+//ENDPOINT_SCAN    = 'http://172.20.10.3:8080/FarmastampatiWS/scan';
 
 var doc = null;           
 var list = null;
@@ -61,7 +63,7 @@ function dosearch(aic_)
 
         tbox_init_retry = 0;
 
-        //
+        // 
         // end fix
         //
 
@@ -109,7 +111,7 @@ function dosearch(aic_)
 
         $.ajax({                    
 
-            url: baseurl_ + 'archive',
+            url: ENDPOINT_ARCHIVE,
             dataType: 'json',
             data: '{ "aic": "' + aic + '" }',
             method: 'post',
@@ -225,7 +227,7 @@ function getpageurl(filename, page)
     var gsext = 'png';            
     var gsopts = gsoptsD44;
     
-    return baseurl_ + 'pages/' + filename + '?page=' + page +
+    return ENDPOINT_PAGES +'/' + filename + '?page=' + page +
             (timeout > 0 ? '&timeout=' + timeout : '') + 
             (nocache ? '&nocache=true' : '') + 
             '&gsext=' + gsext +
@@ -421,7 +423,7 @@ function doscan()
     }
 }
 
-function upload_file(fileURL)
+function upload_file(fileURL, remote_url)
 {
 
     function win(r) {
@@ -446,14 +448,14 @@ function upload_file(fileURL)
         navigator.notification.alert(msg, null, 'Errore di caricamento su server');
     }
 
-    var uri = encodeURI("http://some.server.com/upload.php");
+    var uri = encodeURI(ENDPOINT_SCAN);
 
     var options = new FileUploadOptions();
     options.fileKey="file";
     options.fileName=fileURL.substr(fileURL.lastIndexOf('/')+1);
     options.mimeType="image/jpeg";
 
-    var headers={'headerParam':'headerValue'};
+    var headers={'headerFritz':'eeeeesiamoaltop'};
 
     options.headers = headers;
 
@@ -467,7 +469,7 @@ function upload_file(fileURL)
     };
 
     //ft.upload(fileURL, uri, win, fail, options);
-    ft.upload(fileURL, encodeURI(baseurl_2_ + "scan"), win, fail, options);
+    ft.upload(fileURL, encodeURI(uri), win, fail, options);
 
 }
 
@@ -477,11 +479,11 @@ function upload_file(fileURL)
 // Called when a photo is successfully retrieved
 function onPhotoURISuccess(imageURI) {
 
-    alert('ok 1: ' + imageURI);
+    //alert('ok 1: ' + imageURI);
 
     try {
         //FileIO.updateCameraImages(imageURI);
-        alert('ok 2: ' + imageURI);
+        //alert('ok 2: ' + imageURI);
         upload_file (imageURI);            
         
     }
@@ -500,7 +502,13 @@ function docap() {
 
 //@see  https://github.com/apache/cordova-plugin-camera#module_camera.CameraOptions
 
+/*
     navigator.camera.getPicture(onPhotoURISuccess, onFail, { quality: 50,
+        destinationType: navigator.camera.DestinationType.FILE_URI, 
+        saveToPhotoAlbum: true,
+        correctOrientation: true });*/
+
+    navigator.camera.getPicture(onPhotoURISuccess, onFail, { quality: 10,
         destinationType: navigator.camera.DestinationType.FILE_URI, 
         saveToPhotoAlbum: true,
         correctOrientation: true });
@@ -517,9 +525,6 @@ function docap() {
 }
 
 ///////////////////////////////////////////////////////////////////////////
-
-
-
 
 
 function docap2()
@@ -639,7 +644,7 @@ var app = {
                 $ul.html("<li><div class='ui-loader'><span class='ui-icon ui-icon-loading'></span></div></li>");
                 $ul.listview("refresh");
                 $.ajax({
-                    url: baseurl_ + "autocom",
+                    url: ENDPOINT_AUTOCOM,
                     dataType: "jsonp",
                     crossDomain: true,
                     data: {
