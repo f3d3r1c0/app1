@@ -41,7 +41,11 @@
     <gap:plugin name="org.apache.cordova.network-information" />
     <gap:plugin name="org.apache.cordova.splashscreen" />
     <gap:plugin name="org.apache.cordova.vibration" />
+
+    <!--
     <gap:plugin name="com.phonegap.plugins.barcodescanner" />
+    -->
+
     <icon src="icon.png" />
     <icon gap:platform="android" gap:qualifier="ldpi" src="www/res/icon/android/icon-36-ldpi.png" />
     <icon gap:platform="android" gap:qualifier="mdpi" src="www/res/icon/android/icon-48-mdpi.png" />
@@ -83,9 +87,22 @@
         <allow-intent href="itms-apps:*" />
     </platform>
     <engine name="ios" spec="~3.9.1" />
+
+    <!--
+    <feature name="http://api.phonegap.com/1.0/device" />
+    <feature name="http://api.phonegap.com/1.0/camera"/>
+    <feature name="http://api.phonegap.com/1.0/file"/>
+    <feature name="http://api.phonegap.com/1.0/media"/>
+    <feature name="http://api.phonegap.com/1.0/network"/>
+    -->
+    
+    <!--
     <feature name="BarcodeScanner">
         <param name="android-package" value="com.phonegap.plugins.barcodescanner.BarcodeScanner" />
         <param name="ios-package" value="com.phonegap.plugins.barcodescanner.BarcodeScanner" />
     </feature>
+    -->
+
     <engine name="android" spec="~4.1.1" />
+
 </widget>
